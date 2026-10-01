@@ -46,10 +46,16 @@ RouteBase get $processRoute => GoRouteData.$route(
 );
 
 mixin $ProcessRoute on GoRouteData {
-  static ProcessRoute _fromState(GoRouterState state) => const ProcessRoute();
+  static ProcessRoute _fromState(GoRouterState state) =>
+      ProcessRoute(baseUrl: state.uri.queryParameters['base-url']!);
+
+  ProcessRoute get _self => this as ProcessRoute;
 
   @override
-  String get location => GoRouteData.$location('/process');
+  String get location => GoRouteData.$location(
+    '/process',
+    queryParams: {'base-url': _self.baseUrl},
+  );
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -73,23 +79,27 @@ RouteBase get $resultListRoute => GoRouteData.$route(
 
 mixin $ResultListRoute on GoRouteData {
   static ResultListRoute _fromState(GoRouterState state) =>
-      const ResultListRoute();
+      ResultListRoute(state.extra as List<PathResultEntity>);
+
+  ResultListRoute get _self => this as ResultListRoute;
 
   @override
   String get location => GoRouteData.$location('/results');
 
   @override
-  void go(BuildContext context) => context.go(location);
+  void go(BuildContext context) => context.go(location, extra: _self.$extra);
 
   @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: _self.$extra);
 
   @override
   void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+      context.pushReplacement(location, extra: _self.$extra);
 
   @override
-  void replace(BuildContext context) => context.replace(location);
+  void replace(BuildContext context) =>
+      context.replace(location, extra: _self.$extra);
 }
 
 RouteBase get $previewRoute => GoRouteData.$route(
@@ -99,21 +109,26 @@ RouteBase get $previewRoute => GoRouteData.$route(
 );
 
 mixin $PreviewRoute on GoRouteData {
-  static PreviewRoute _fromState(GoRouterState state) => const PreviewRoute();
+  static PreviewRoute _fromState(GoRouterState state) =>
+      PreviewRoute(state.extra as PathResultEntity);
+
+  PreviewRoute get _self => this as PreviewRoute;
 
   @override
   String get location => GoRouteData.$location('/preview');
 
   @override
-  void go(BuildContext context) => context.go(location);
+  void go(BuildContext context) => context.go(location, extra: _self.$extra);
 
   @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: _self.$extra);
 
   @override
   void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+      context.pushReplacement(location, extra: _self.$extra);
 
   @override
-  void replace(BuildContext context) => context.replace(location);
+  void replace(BuildContext context) =>
+      context.replace(location, extra: _self.$extra);
 }

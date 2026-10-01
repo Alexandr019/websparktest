@@ -1,0 +1,1 @@
+enum CellType { empty, blocked, start, end, path }
